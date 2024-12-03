@@ -13,7 +13,7 @@ public class GridMapper {
                         .map(cell -> cell.getState().name())
                         .collect(Collectors.toList()))
                 .collect(Collectors.toList());
+        return new GridDTO(grid.size(), grid.get(0).size(), grid);
 
-        return new GridDTO(grid.size(), grid.get(0).size(), gridState);
     }
 }
