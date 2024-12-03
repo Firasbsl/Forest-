@@ -17,10 +17,9 @@ public class FirePropagationService {
     private final Random random = new Random();
 
     public List<List<GridCell>> initializeGrid(int height, int width, List<int[]> initialFires) {
-             logger.info("Initialisation de la grille avec dimensions {}x{}", height, width);
+        logger.info("Initialisation de la grille avec dimensions {}x{}", height, width);
 
-
-            if (height <= 0 || width <= 0) {
+        if (height <= 0 || width <= 0) {
             throw new SimulationException("Les dimensions de la grille doivent être positives.");
         }
 
@@ -41,7 +40,6 @@ public class FirePropagationService {
             grid.get(position[0]).get(position[1]).setState(CellState.BURNING);
         }
         logger.info("Grille initialisée avec {} positions en feu.", initialFires.size());
-
 
         return grid;
     }
