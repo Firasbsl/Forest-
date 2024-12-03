@@ -1,4 +1,4 @@
-package com.example.simulation.forest;
+package com.example.simulation.forest.Entity;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
