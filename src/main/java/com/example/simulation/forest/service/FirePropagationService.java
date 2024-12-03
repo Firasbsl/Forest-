@@ -2,6 +2,9 @@ package com.example.simulation.forest.service;
 
 import com.example.simulation.forest.Entity.CellState;
 import com.example.simulation.forest.Entity.GridCell;
+import com.example.simulation.forest.exception.SimulationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,9 +13,17 @@ import java.util.Random;
 
 @Service
 public class FirePropagationService {
+    private final Logger logger = LoggerFactory.getLogger(FirePropagationService.class);
     private final Random random = new Random();
 
     public List<List<GridCell>> initializeGrid(int height, int width, List<int[]> initialFires) {
+             logger.info("Initialisation de la grille avec dimensions {}x{}", height, width);
+
+
+            if (height <= 0 || width <= 0) {
+            throw new SimulationException("Les dimensions de la grille doivent être positives.");
+        }
+
         List<List<GridCell>> grid = new ArrayList<>();
 
         for (int i = 0; i < height; i++) {
@@ -24,13 +35,24 @@ public class FirePropagationService {
         }
 
         for (int[] position : initialFires) {
+            if (position[0] < 0 || position[0] >= height || position[1] < 0 || position[1] >= width) {
+                throw new SimulationException("Position initiale en dehors des limites de la grille.");
+            }
             grid.get(position[0]).get(position[1]).setState(CellState.BURNING);
         }
+        logger.info("Grille initialisée avec {} positions en feu.", initialFires.size());
+
 
         return grid;
     }
 
     public List<List<GridCell>> propagateFire(List<List<GridCell>> grid, double probability) {
+        logger.info("Propagation du feu avec une probabilité de {}", probability);
+
+        if (probability < 0 || probability > 1) {
+            throw new SimulationException("La probabilité doit être comprise entre 0 et 1.");
+        }
+
         int height = grid.size();
         int width = grid.get(0).size();
 
@@ -45,7 +67,7 @@ public class FirePropagationService {
                 }
             }
         }
-
+        logger.info("{} nouvelles cases en feu après propagation.", newFires.size());
         for (int[] fire : newFires) {
             grid.get(fire[0]).get(fire[1]).setState(CellState.BURNING);
         }
